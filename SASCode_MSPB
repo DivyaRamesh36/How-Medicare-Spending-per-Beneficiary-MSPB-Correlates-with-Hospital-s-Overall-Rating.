@@ -1,0 +1,197 @@
+proc import out=FQS datafile="/home/u62214881/sasuser.v94/Project_Capstone/FINAL.xlsx"
+dbms=xlsx replace;
+run;
+
+
+/* Numerical Summary */
+
+
+proc means data=FQS n mean median std min max var;
+	var Hospital_Overall_Rating_C Score Cost_of_Living_Index Hospital_Type_C HospitalOwnership_Govt_NonGovt TraumaCenter_C EmergencyServices_Y_N Beds;
+	run;
+	
+/* Plots*/
+
+proc sgplot data=FQS;
+	vbox Score/category=Hospital_Overall_Rating_C;
+	title "MSPBScore by Hospital Overall Rating";
+run;
+
+proc means data=FQS n mean median std min max var ;
+	var Score;
+	class Hospital_Overall_Rating_C;
+	run;
+
+proc sgplot data=FQS;
+	vbox Cost_of_Living_Index/category=Hospital_Overall_Rating_C;
+	title "CostIndex by Hospital Overall Rating";
+run;
+
+proc means data=FQS n mean median std min max var ;
+	var Cost_of_Living_Index;
+	class Hospital_Overall_Rating_C;
+	run;
+	
+	
+proc sgplot data=FQS;
+	vbox Score/category=TraumaCenter_C;
+	title "MSPBScore by Trauma Centers";
+run;
+
+proc means data=FQS n mean median std min max var  ;
+	var Score;
+	class TraumaCenter_C;
+	run;
+
+
+proc sgplot data=FQS;
+	vbox Score/category=EmergencyServices_Y_N;
+	title "MSPBScore by EmergencyServices";
+run;
+
+proc means data=FQS n mean median std min max var  ;
+	var Score;
+	class EmergencyServices_Y_N;
+	run;
+
+/* Correlation Matrix*/
+
+proc corr data=FQS;
+	var Hospital_Overall_Rating_C Score Hospital_Type_C Cost_of_Living_Index HospitalOwnership_Govt_NonGovt TraumaCenter_C EmergencyServices_Y_N Beds ;
+	run;
+	
+/* Regression Model*/
+
+proc reg data=FQS;
+	model Hospital_Overall_Rating_C = Score Hospital_Type_C Cost_of_Living_Index HospitalOwnership_Govt_NonGovt TraumaCenter_C EmergencyServices_Y_N Beds;
+run;
+
+proc hpreg data=FQS seed=12345;
+	model Hospital_Overall_Rating_C = Score Hospital_Type_C Cost_of_Living_Index HospitalOwnership_Govt_NonGovt TraumaCenter_C EmergencyServices_Y_N Beds;
+	partition fraction (validate=0.2);
+run;
+
+
+
+/* RURAL URBAN CONTINUMM CODES - 1*/
+
+proc import out=QualityScore datafile="/home/u62214881/sasuser.v94/Project_Capstone/FINAL_1_2.xlsx"
+dbms=xlsx replace;
+run;
+
+proc means data=QualityScore(where=(RUCC_2013=1)) n mean median std min max ;
+	var Hospital_Overall_Rating_C Score Cost_of_Living_Index Hospital_Type_C HospitalOwnership_Govt_NonGovt TraumaCenter_C EmergencyServices_Y_N Beds;
+	run;
+
+/*PLOTS*/
+
+proc sgplot data=QualityScore(where=(RUCC_2013=1));
+	vbox Score/category=Hospital_Overall_Rating_C;
+	title "MSPBScore by Hospital Overall Rating";
+run;
+
+proc means data=QualityScore(where=(RUCC_2013=1)) n mean median std min max var ;
+	var Score;
+	class Hospital_Overall_Rating_C;
+	run;
+
+proc sgplot data=QualityScore(where=(RUCC_2013=1));
+	vbox Cost_of_Living_Index/category=Hospital_Overall_Rating_C;
+	title "CostIndex by Hospital Overall Rating";
+run;
+
+proc means data=QualityScore(where=(RUCC_2013=1)) n mean median std min max var ;
+	var Cost_of_Living_Index;
+	class Hospital_Overall_Rating_C;
+	run;
+
+proc sgplot data=QualityScore(where=(RUCC_2013=1));
+	vbox Score/category=TraumaCenter_C;
+	title "MSPBScore by Trauma Centers";
+run;
+
+proc means data=QualityScore(where=(RUCC_2013=1)) n mean median std min max var ;
+	var Score;
+	class TraumaCenter_C;
+	run;
+
+proc sgplot data=QualityScore(where=(RUCC_2013=1));
+	vbox Score/category=EmergencyServices_Y_N;
+	title "MSPBScore by EmergencyServices";
+run;
+
+proc means data=QualityScore(where=(RUCC_2013=1)) n mean median std min max var ;
+	var Score;
+	class EmergencyServices_Y_N;
+	run; 
+	
+	
+/* Correlation Matrix*/
+
+proc corr data=QualityScore(where=(RUCC_2013=1));
+	var Hospital_Overall_Rating_C Score Hospital_Type_C Cost_of_Living_Index HospitalOwnership_Govt_NonGovt TraumaCenter_C EmergencyServices_Y_N Beds ;
+	run;
+
+/* Regression Matrix*/
+
+proc reg data= QualityScore(where=(RUCC_2013=1));
+	model Hospital_Overall_Rating_C = Score Hospital_Type_C Cost_of_Living_Index HospitalOwnership_Govt_NonGovt TraumaCenter_C EmergencyServices_Y_N Beds;
+run;
+
+	
+proc hpreg data=QualityScore(where=(RUCC_2013=1)) seed=12345;
+	model Hospital_Overall_Rating_C = Score Hospital_Type_C Cost_of_Living_Index HospitalOwnership_Govt_NonGovt TraumaCenter_C EmergencyServices_Y_N Beds;
+	partition fraction (validate=0.2);
+run;
+
+
+/* Rural Urban Continumm Codes - 2 */
+
+proc means data=QualityScore(where=(RUCC_2013=2)) n mean median std min max ;
+	var Hospital_Overall_Rating_C Score Cost_of_Living_Index Hospital_Type_C HospitalOwnership_Govt_NonGovt TraumaCenter_C EmergencyServices_Y_N Beds;
+	run;
+
+/*PLOTS*/
+
+proc sgplot data=QualityScore(where=(RUCC_2013=2));
+	vbox Score/category=Hospital_Overall_Rating_C;
+	title "MSPBScore by Hospital Overall Rating";
+run;
+
+proc means data=QualityScore(where=(RUCC_2013=2)) n mean median std min max var ;
+	var Score;
+	class Hospital_Overall_Rating_C;
+	run;
+
+proc sgplot data=QualityScore(where=(RUCC_2013=2));
+	vbox Cost_of_Living_Index/category=Hospital_Overall_Rating_C;
+	title "CostIndex by Hospital Overall Rating";
+run;
+
+proc sgplot data=QualityScore(where=(RUCC_2013=2));
+	vbox Score/category=TraumaCenter_C;
+	title "MSPBScore by Trauma Centers";
+run;
+
+proc sgplot data=QualityScore(where=(RUCC_2013=2));
+	vbox Score/category=EmergencyServices_Y_N;
+	title "MSPBScore by EmergencyServices";
+run;
+
+/* Correlation Matrix*/
+
+proc corr data=QualityScore(where=(RUCC_2013=2));
+	model Hospital_Overall_Rating_C = Score Hospital_Type_C Cost_of_Living_Index HospitalOwnership_Govt_NonGovt TraumaCenter_C EmergencyServices_Y_N Beds
+	run;
+
+/* Regression Matrix*/
+
+proc reg data=QualityScore(where=(RUCC_2013=2));
+	model Hospital_Overall_Rating_C = Score Hospital_Type_C HospitalOwnership_Govt_NonGovt TraumaCenter_C EmergencyServices_Y_N Beds;
+run;
+
+	
+proc hpreg data=QualityScore(where=(RUCC_2013=2)) seed=12345;
+	model Hospital_Overall_Rating_C = Score Hospital_Type_C HospitalOwnership_Govt_NonGovt TraumaCenter_C EmergencyServices_Y_N Beds;
+	partition fraction (validate=0.3);
+run;
